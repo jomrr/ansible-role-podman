@@ -16,11 +16,11 @@ Ansible 2.7 or higher is recommended.
 
 Variables for this role:
 
-| variable | default value in defaults/main.yml | description |
+| variable | defaults/main.yml | description |
 | -------- | ---------------------------------- | ----------- |
 | role_podman_enabled | false | determine whether role is enabled (true) or not (false) |
 | podman_users | [] | non-root users that can use podman |
-| podman_registries | 'docker.io' | list of registries that podman is pulling images from |
+| podman_registries | - 'docker.io' | list of registries that podman is pulling images from |
 | podman_insecure_registries | [] | non TLS registries for podman, i.e. localhost:5000 |
 | podman_blocked_registries | [] | blocked container registries |
 
