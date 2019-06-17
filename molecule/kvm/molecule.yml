@@ -1,0 +1,51 @@
+---
+# role: ansible-role-podman
+# file: molecule/kvm/molecule.yml
+
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+    type: libvirt
+    options:
+      memory: 1024
+      cpus: 1
+lint:
+  name: yamllint
+  options:
+    config-file: molecule/shared/yamllint.yml
+platforms:
+  - name: podman-arch
+    box: "archlinux/archlinux"
+  - name: podman-centos7
+    box: "centos/7"
+  - name: podman-debian9
+    box: "debian/stretch64"
+  - name: podman-ubuntu1804
+    box: "generic/ubuntu1804"
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  playbooks:
+    prepare: ../shared/prepare.yml
+    converge: ../shared/playbook.yml
+  inventory:
+    group_vars:
+      all:
+        role_podman_enabled: true
+scenario:
+  name: kvm
+verifier:
+  name: testinfra
+  env:
+    PYTHONWARNINGS: "ignore"
+  directory: ../tests
+  options:
+    v: true
+    sudo: true
+  lint:
+    name: flake8

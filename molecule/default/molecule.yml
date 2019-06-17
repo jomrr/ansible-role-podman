@@ -1,0 +1,52 @@
+---
+# role: ansible-role-podman
+# file: molecule/kvm/molecule.yml
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-file: molecule/shared/yamllint.yml
+platforms:
+  - name: podman-alpine39
+    image: "alpine:3.9"
+  - name: podman-amazon2
+    image: "amazonlinux:2"
+  - name: podman-arch
+    image: "archlinux/base"
+  - name: podman-centos7
+    image: "centos:centos7"
+  - name: podman-debian9
+    image: "debian:stretch"
+  - name: podman-opensuse-leap
+    image: "opensuse:leap"
+  - name: podman-oracle7
+    image: "oraclelinux:7"
+  - name: podman-ubuntu1804
+    image: "ubuntu:18.04"
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  playbooks:
+    converge: ../shared/playbook.yml
+  inventory:
+    group_vars:
+      all:
+        role_podman_enabled: true
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  env:
+    PYTHONWARNINGS: "ignore"
+  directory: ../tests
+  options:
+    v: true
+    sudo: true
+  lint:
+    name: flake8

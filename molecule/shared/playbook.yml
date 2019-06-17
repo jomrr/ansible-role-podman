@@ -1,0 +1,9 @@
+---
+# role: ansible-role-podman
+# file: molecule/default/playbook.yml
+
+- name: Converge
+  hosts: all
+  become: True
+  roles:
+    - role: ansible-role-podman
