@@ -7,10 +7,6 @@
   become: True
   gather_facts: False
   tasks:
-    - name: Install python for Ansible (Alpine)
-      raw: apk add -y python
-      changed_when: False
-      ignore_errors: True
     - name: Install python for Ansible (Archlinux)
       raw: pacman --noconfirm -S python
       changed_when: False

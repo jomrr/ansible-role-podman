@@ -1,3 +1,10 @@
 ---
 # role: ansible-role-podman
 # file: vars/Debian.yml
+
+podman_ppa: "ppa:projectatomic/ppa"
+
+podman_packages:
+  - software-properties-common
+  - uidmap
+  - podman

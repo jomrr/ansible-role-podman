@@ -21,8 +21,6 @@ platforms:
     box: "archlinux/archlinux"
   - name: podman-centos7
     box: "centos/7"
-  - name: podman-debian9
-    box: "debian/stretch64"
   - name: podman-ubuntu1804
     box: "generic/ubuntu1804"
 provisioner:
@@ -37,6 +35,8 @@ provisioner:
     group_vars:
       all:
         role_podman_enabled: true
+        podman_users:
+          - vagrant
 scenario:
   name: kvm
 verifier:
@@ -46,6 +46,6 @@ verifier:
   directory: ../tests
   options:
     v: true
-    sudo: true
+    sudo: false
   lint:
     name: flake8

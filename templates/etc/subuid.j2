@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+{% if ansible_os_family == 'Debian' %}
+lxd:100000:65536
+{% endif %}
+root:100000:65536
+{% for user in podman_users %}
+{{ user }}:165536:65536
+{% endfor %}

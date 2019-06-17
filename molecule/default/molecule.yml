@@ -11,16 +11,12 @@ lint:
   options:
     config-file: molecule/shared/yamllint.yml
 platforms:
-  - name: podman-alpine39
-    image: "alpine:3.9"
   - name: podman-amazon2
     image: "amazonlinux:2"
   - name: podman-arch
     image: "archlinux/base"
   - name: podman-centos7
     image: "centos:centos7"
-  - name: podman-debian9
-    image: "debian:stretch"
   - name: podman-opensuse-leap
     image: "opensuse:leap"
   - name: podman-oracle7
@@ -38,6 +34,8 @@ provisioner:
     group_vars:
       all:
         role_podman_enabled: true
+        podman_users:
+          - vagrant
 scenario:
   name: default
 verifier:
@@ -47,6 +45,6 @@ verifier:
   directory: ../tests
   options:
     v: true
-    sudo: true
+    sudo: false
   lint:
     name: flake8

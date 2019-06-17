@@ -1,0 +1,28 @@
+---
+# role: ansible-role-podman
+# file: tasks/setup.yml
+
+- name: Add podman ppa
+  apt_repository:
+    repo: "{{ podman_ppa }}"
+    codename: "{{ ansible_distribution_release }}"
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Add shadow-utils yum repo
+  yum_repository:
+    name: vbatts-shadow-utils-newxidmap
+    description: Copr repo for shadow-utils-newxidmap owned by vbatts
+    file: vbatts-shadow-utils-newxidmap-epel-7
+    baseurl: https://copr-be.cloud.fedoraproject.org/results/vbatts/shadow-utils-newxidmap/epel-7-$basearch/
+    gpgcheck: yes
+    gpgkey: https://copr-be.cloud.fedoraproject.org/results/vbatts/shadow-utils-newxidmap/pubkey.gpg
+    repo_gpgcheck: no
+    skip_if_unavailable: yes
+    enabled: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Install podman packages
+  package:
+    name: "{{ podman_packages }}"
+    state: present

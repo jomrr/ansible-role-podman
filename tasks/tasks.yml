@@ -1,5 +1,4 @@
 ---
-
 # role: ansible-role-podman
 # file: tasks/tasks.yml
 
@@ -16,3 +15,15 @@
       skip: true
   loop_control:
     loop_var: vars_file
+
+- name: Include tasks for installing podman
+  include_tasks: setup.yml
+
+- name: Include tasks for /etc/containers configuration
+  include_tasks: conf.yml
+
+- name: Include tasks for sysctl configuration
+  include_tasks: sysctl.yml
+
+- name: Include tasks for subuid/subgid mappings
+  include_tasks: idmap.yml

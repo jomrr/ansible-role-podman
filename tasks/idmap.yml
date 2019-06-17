@@ -1,0 +1,15 @@
+---
+# role: ansible-role-podman
+# file: tasks/idmap.yml
+
+- name: Create /etc/subuid and /etc/subgid
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  with_items:
+    - etc/subuid
+    - etc/subgid
