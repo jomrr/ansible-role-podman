@@ -14,7 +14,7 @@ Ansible 2.7 or higher is recommended.
 
 ## Variables
 
-Variables for this
+Variables for this role:
 
 | variable | default value in defaults/main.yml | description |
 | -------- | ---------------------------------- | ----------- |
