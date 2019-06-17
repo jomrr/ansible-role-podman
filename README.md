@@ -22,6 +22,7 @@ None.
 
 ```yaml
 ---
+# role: ansible-role-podman
 # file: site.yml
 
 - hosts: podman-servers
