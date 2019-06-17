@@ -3,12 +3,10 @@
 Ansible role for setting up podman.
 
 ## Requirements
-===
 
 Ansible 2.7 or higher is recommended.
 
 ## Variables
-===
 
 Variables for this
 
@@ -17,12 +15,10 @@ Variables for this
 | role_podman_enabled | false | determine whether role is enabled (true) or not (false) |
 
 ## Dependencies
-===
 
 None.
 
 ## Example Playbook
-===
 
 ```yaml
 ---
@@ -34,7 +30,6 @@ None.
 ```
 
 ## License and Author
-===
 
 - Author:: Jonas Mauer (<jam@kabelmail.net>)
 - Copyright:: 2019, Jonas Mauer
