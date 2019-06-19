@@ -1,6 +1,6 @@
 # ansible-role-podman
 
-Ansible role for setting up podman.
+Ansible role for setting up [podman](https://podman.io).
 
 ## Supported Platforms
 
@@ -10,21 +10,25 @@ Ansible role for setting up podman.
 
 ## Requirements
 
-Ansible 2.7 or higher is recommended.
+Ansible 2.7 or higher is required for defaults/main/*.yml to work correctly.
 
 ## Variables
 
 Variables for this role:
 
-| variable | defaults/main.yml | description |
-| -------- | ---------------------------------- | ----------- |
-| role_podman_enabled | false | determine whether role is enabled (true) or not (false) |
-| podman_users | [] | non-root users that can use podman |
-| podman_registries | - 'docker.io' | list of registries that podman is pulling images from |
-| podman_insecure_registries | [] | non TLS registries for podman, i.e. localhost:5000 |
-| podman_blocked_registries | [] | blocked container registries |
-| podman_storage_driver | 'overlay' | storage driver |
-| podman_storage_mountopt | 'nodev' | storage driver mount options |
+| variable | defaults/main/*.yml | type | description |
+| -------- | ------------------- | ---- | ----------- |
+| role_podman_enabled | False | boolean | determine whether role is enabled (true) or not (false) |
+| podman_users | {} | dictionary | podman users that get uid mapping configured |
+| podman_manual_mapping | True | boolean | ansible managed /etc/subuid and /etc/subgid entries |
+| podman_search_registries | - 'docker.io' | items | list of registries that podman is pulling images from |
+| podman_insecure_registries | [] | items | non TLS registries for podman, i.e. localhost:5000 |
+| podman_blocked_registries | [] | items | blocked container registries |
+| podman_conf_cgroup_manager | 'systemd' | string | /etc/container/libpod.conf: cgroup_manager |
+| podman_conf_events_logger | 'journald' | string | /etc/container/libpod.conf: events_logger |
+| podman_conf_namespace | '' | string | /etc/container/libpod.conf: namespace (=default namespace) |
+| podman_storage_driver | 'overlay' | string | storage driver |
+| podman_storage_mountopt | 'nodev' | string | storage driver mount options |
 
 ## Dependencies
 
@@ -32,18 +36,26 @@ None.
 
 ## Example Playbook
 
+For a basic setup with default values run:
+
 ```yaml
 ---
-# role: ansible-role-podman
+# play: example-site
 # file: site.yml
 
 - hosts: podman-servers
   vars:
     role_podman_enabled: True
     podman_users:
-      - <your-username>
+      root: '100000:65535'
+      <user1>: '165536:65535'
+      ...
     podman_registries:
+      - 'registry.access.redhat.com'
       - 'docker.io'
+      - 'registry.fedoraproject.org'
+      - 'quay.io'
+      - 'registry.centos.org'
   roles:
     - role: ansible-role-podman
 ```

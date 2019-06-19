@@ -36,7 +36,8 @@ provisioner:
       all:
         role_podman_enabled: true
         podman_users:
-          - vagrant
+          root: '100000:65535'
+          vagrant: '165536:65535'
 scenario:
   name: kvm
 verifier:

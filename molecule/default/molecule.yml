@@ -30,7 +30,6 @@ provisioner:
         role_podman_enabled: true
         podman_users:
           root: '100000:65535'
-          nobody: '165536:65535'
         podman_storage_driver: 'vfs'
         podman_storage_mountopt: ''
         podman_conf_cgroup_manager: 'cgroupfs'
