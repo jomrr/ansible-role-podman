@@ -4,3 +4,6 @@
 
 podman_packages:
   - podman
+  - shadow-utils
+
+podman_manual_mapping: false

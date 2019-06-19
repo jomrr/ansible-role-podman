@@ -11,18 +11,12 @@ lint:
   options:
     config-file: molecule/shared/yamllint.yml
 platforms:
-  - name: podman-amazon2
-    image: "amazonlinux:2"
-  - name: podman-arch
-    image: "archlinux/base"
   - name: podman-centos7
-    image: "centos:centos7"
-  - name: podman-opensuse-leap
-    image: "opensuse:leap"
-  - name: podman-oracle7
-    image: "oraclelinux:7"
+    image: "centos:7"
+    privileged: True
   - name: podman-ubuntu1804
     image: "ubuntu:18.04"
+    privileged: True
 provisioner:
   name: ansible
   log: true
@@ -35,7 +29,12 @@ provisioner:
       all:
         role_podman_enabled: true
         podman_users:
-          - vagrant
+          root: '100000:65535'
+          nobody: '165536:65535'
+        podman_storage_driver: 'vfs'
+        podman_storage_mountopt: ''
+        podman_conf_cgroup_manager: 'cgroupfs'
+        podman_conf_events_logger: 'file'
 scenario:
   name: default
 verifier:

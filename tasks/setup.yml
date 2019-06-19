@@ -21,6 +21,16 @@
     skip_if_unavailable: yes
     enabled: yes
   when: ansible_os_family == 'RedHat'
+    and ansible_distribution_version is version('7.6', '<=')
+
+- name: Install RedHat < 7.7 prerequisites
+  yum: 
+    name:
+      - shadow-utils46-newxidmap
+      - slirp4netns
+    state: present
+  when: ansible_os_family == 'RedHat'
+    and ansible_distribution_version is version('7.6', '<=')
 
 - name: Install podman packages
   package:

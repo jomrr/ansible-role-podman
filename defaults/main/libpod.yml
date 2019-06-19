@@ -1,0 +1,18 @@
+---
+# role: ansible-role-podman
+# file: defaults/main/libpod.yml
+#
+###############################################################################
+# libpod.conf for root: /etc/container/libpod.conf
+###############################################################################
+#
+podman_conf_cgroup_manager: 'systemd'
+podman_conf_events_logger: 'journald'
+#
+# Default libpod namespace
+# If libpod is joined to a namespace, it will see only containers and pods
+# that were created in the same namespace, and will create new containers and
+# pods in that namespace.
+# The default namespace is "", which corresponds to no namespace. When no
+# namespace is set, all containers and pods are visible
+podman_conf_namespace: ''

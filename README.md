@@ -23,6 +23,8 @@ Variables for this role:
 | podman_registries | - 'docker.io' | list of registries that podman is pulling images from |
 | podman_insecure_registries | [] | non TLS registries for podman, i.e. localhost:5000 |
 | podman_blocked_registries | [] | blocked container registries |
+| podman_storage_driver | 'overlay' | storage driver |
+| podman_storage_mountopt | 'nodev' | storage driver mount options |
 
 ## Dependencies
 
@@ -57,6 +59,7 @@ See LICENSE file in repository.
 ## References
 
 - [libpod Installation Instructions](https://github.com/containers/libpod/blob/master/)
+- [podman manpage](https://github.com/containers/libpod/blob/master/docs/podman.1.md)
 - [ArchWiki - Linux Containers](https://wiki.archlinux.org/index.php/Linux_Containers)
 install.md)
 - [vbatts: centos7 - non-root podman](https://asciinema.org/a/221441)

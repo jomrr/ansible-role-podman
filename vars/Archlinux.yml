@@ -4,3 +4,5 @@
 
 podman_packages:
   - podman
+
+podman_manual_mapping: true

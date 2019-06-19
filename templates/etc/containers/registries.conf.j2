@@ -10,7 +10,7 @@
 # Registries to search for images that are not fully-qualified.
 # i.e. foobar.com/my_image:latest vs my_image:latest
 [registries.search]
-registries = ['{{ podman_registries | join("', '") }}']
+registries = ['{{ podman_search_registries | join("', '") }}']
 
 # Registries that do not use TLS when pulling images or uses self-signed
 # certificates.

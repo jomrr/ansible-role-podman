@@ -2,13 +2,15 @@
 # role: ansible-role-podman
 # file: tasks/conf.yml
 
-- name: Configure registries.conf
+- name: Configure /etc/container/*.conf
   template:
     src: "{{ item }}.j2"
     dest: "/{{ item }}"
     owner: root
     group: root
-    mode: '0644'
+    mode: 0644
     backup: yes
-  with_items:
+  loop:
+    - etc/containers/libpod.conf
     - etc/containers/registries.conf
+    - etc/containers/storage.conf

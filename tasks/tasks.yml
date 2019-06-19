@@ -25,5 +25,5 @@
 - name: Include tasks for sysctl configuration
   include_tasks: sysctl.yml
 
-- name: Include tasks for subuid/subgid mappings
-  include_tasks: idmap.yml
+- name: Include tasks for subuid/subgid mappings and user config
+  include_tasks: users.yml

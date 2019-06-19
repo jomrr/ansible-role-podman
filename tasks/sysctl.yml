@@ -10,7 +10,7 @@
     reload: yes
   when: ansible_os_family == 'Archlinux'
 
-- name: Set sysctl config (Archlinux)
+- name: Set sysctl config (RedHat)
   sysctl:
     name: user.max_user_namespaces
     value: '28633'

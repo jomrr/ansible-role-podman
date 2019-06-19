@@ -1,0 +1,12 @@
+---
+# role: ansible-role-podman
+# file: defaults/main/storage.yml
+#
+###############################################################################
+# /etc/container/storage.conf
+###############################################################################
+#
+# storage driver for podman
+podman_storage_driver: 'overlay'
+# storage driver mount options for podman
+podman_storage_mountopt: 'nodev'
