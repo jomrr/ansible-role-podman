@@ -58,9 +58,8 @@ See LICENSE file in repository.
 
 ## References
 
-- [libpod Installation Instructions](https://github.com/containers/libpod/blob/master/)
+- [libpod Installation Instructions](https://github.com/containers/libpod/blob/master/install.md)
 - [podman manpage](https://github.com/containers/libpod/blob/master/docs/podman.1.md)
 - [ArchWiki - Linux Containers](https://wiki.archlinux.org/index.php/Linux_Containers)
-install.md)
 - [vbatts: centos7 - non-root podman](https://asciinema.org/a/221441)
 - [A preview of running containers without root in RHEL 7.6](https://www.redhat.com/en/blog/preview-running-containers-without-root-rhel-76)
