@@ -15,7 +15,7 @@ RUN if [ $(command -v apk) ]; then \
 
 # Archlinux
 RUN if [ $(command -v pacman) ]; then \
-    pacman --sync --noconfirm --refresh python bash sudo grep; fi
+    pacman --sync --noconfirm --refresh python bash sudo grep procps-ng; fi
 
 # Debian
 RUN if [ $(command -v apt-get) ]; then \

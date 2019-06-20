@@ -4,6 +4,6 @@
 
 podman_packages:
   - podman
-  - shadow-utils
+  - podman-cni-config
 
 podman_manual_mapping: false

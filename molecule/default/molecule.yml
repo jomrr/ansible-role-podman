@@ -11,9 +11,18 @@ lint:
   options:
     config-file: molecule/shared/yamllint.yml
 platforms:
+  - name: podman-arch
+    image: "archlinux/base"
+    privileged: True
   - name: podman-centos7
     image: "centos:7"
     privileged: True
+  # - name: podman-suse
+  #   image: "opensuse/leap"
+  #   privileged: True
+  # - name: podman-opensuse
+  #   image: "opensuse/tumbleweed"
+  #   privileged: True
   - name: podman-ubuntu1804
     image: "ubuntu:18.04"
     privileged: True
