@@ -7,10 +7,10 @@
 ###############################################################################
 #
 # default registries that podman is searching for container images
-# i.e. 'registry.access.redhat.com', 'docker.io', 'registry.fedoraproject.org', 
+# i.e. 'registry.access.redhat.com', 'docker.io', 'registry.fedoraproject.org',
 # 'quay.io', 'registry.centos.org'
 # default is docker.io only
-podman_search_registries: 
+podman_search_registries:
  - 'docker.io'
 # insecure registries (no TLS) that podman is searching for container images
 # i.e. localhost:5000

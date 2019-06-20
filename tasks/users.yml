@@ -10,13 +10,13 @@
     group: root
     mode: '0644'
     backup: yes
-  with_items:
+  loop:
     - etc/subuid
     - etc/subgid
-  when: podman_manual_mapping | bool
+  when: podman_manual_mapping|bool
 
 - name: Set getent_passwd fact
-  getent: 
+  getent:
     database: passwd
 
 - name: Create directory
@@ -26,11 +26,11 @@
     owner: "{{ getent_passwd[item.key][1] }}"
     group: "{{ getent_passwd[item.key][2] }}"
   loop: "{{ podman_users|dict2items }}"
-  when: getent_passwd[item.key][1] >= 1000
+  when: getent_passwd[item.key][1]|int >= 1000
 
 - name: Deploy user configuration for non-root pods
   template:
     src: home/libpod.conf.j2
     dest: "{{ getent_passwd[item.key][4] }}/.config/containers/libpod.conf"
   loop: "{{ podman_users|dict2items }}"
-  when: getent_passwd[item.key][1] >= 1000
+  when: getent_passwd[item.key][1]|int >= 1000
