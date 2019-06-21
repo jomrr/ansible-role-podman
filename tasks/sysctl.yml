@@ -10,10 +10,13 @@
     reload: yes
   when: ansible_os_family == 'Archlinux'
 
-- name: Set sysctl config (RedHat)
-  sysctl:
-    name: user.max_user_namespaces
-    value: '28633'
-    sysctl_file: /etc/sysctl.d/99-userns.conf
-    reload: yes
-  when: ansible_os_family == 'RedHat'
+# ERROR in travis environment:
+# /proc/sys/user/max_user_namespaces - no such file or directory
+#
+# - name: Set sysctl config (RedHat)
+#   sysctl:
+#     name: user.max_user_namespaces
+#     value: '28633'
+#     sysctl_file: /etc/sysctl.d/99-userns.conf
+#     reload: yes
+#   when: ansible_os_family == 'RedHat'
