@@ -9,7 +9,7 @@ python:
 services: docker
 
 install:
-  - pip install molecule docker
+  - pip install testinfra molecule docker
 
 script:
   - molecule --version
