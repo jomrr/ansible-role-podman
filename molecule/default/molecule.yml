@@ -17,8 +17,6 @@ platforms:
   - name: podman-centos7
     image: "centos:7"
     privileged: True
-    capabilities:
-      - SYS_ADMIN
   # - name: podman-suse
   #   image: "opensuse/leap"
   #   privileged: True
