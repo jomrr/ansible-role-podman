@@ -7,7 +7,7 @@
 ###############################################################################
 #
 podman_conf_cgroup_manager: 'systemd'
-podman_conf_events_logger: 'journald'
+podman_conf_events_logger: 'file'
 #
 # Default libpod namespace
 # If libpod is joined to a namespace, it will see only containers and pods
