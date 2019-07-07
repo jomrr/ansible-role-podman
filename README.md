@@ -25,7 +25,7 @@ Variables for this role:
 | podman_insecure_registries | [] | items | non TLS registries for podman, i.e. localhost:5000 |
 | podman_blocked_registries | [] | items | blocked container registries |
 | podman_conf_cgroup_manager | 'systemd' | string | /etc/container/libpod.conf: cgroup_manager |
-| podman_conf_events_logger | 'journald' | string | /etc/container/libpod.conf: events_logger |
+| podman_conf_events_logger | 'file' | string | /etc/container/libpod.conf: events_logger, due to podman error with journald, see https://github.com/containers/libpod/issues/3126 |
 | podman_conf_namespace | '' | string | /etc/container/libpod.conf: namespace (=default namespace) |
 | podman_storage_driver | 'overlay' | string | storage driver |
 | podman_storage_mountopt | 'nodev' | string | storage driver mount options |
