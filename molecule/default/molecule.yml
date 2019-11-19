@@ -36,7 +36,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        role_podman_enabled: true
+        podman_enabled: true
         podman_users:
           root: '100000:65535'
         podman_storage_driver: 'vfs'

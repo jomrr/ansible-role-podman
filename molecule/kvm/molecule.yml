@@ -34,7 +34,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        role_podman_enabled: true
+        podman_enabled: true
         podman_users:
           root: '100000:65535'
           vagrant: '165536:65535'
