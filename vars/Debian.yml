@@ -28,4 +28,4 @@ podman_packages:
   - runc
   - uidmap
 
-podman_manual_mapping: true
+podman_manual_mapping: True

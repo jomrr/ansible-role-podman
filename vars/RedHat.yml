@@ -4,24 +4,5 @@
 
 podman_packages:
   - podman
-  - atomic-registries
-  - btrfs-progs-devel
-  - containernetworking-cni
-  - device-mapper-devel
-  - git
-  - glib2-devel
-  - glibc-devel
-  - glibc-static
-  - gpgme-devel
-  - iptables
-  - libassuan-devel
-  - libgpg-error-devel
-  - libseccomp-devel
-  - libselinux-devel
-  - make
-  - ostree-devel
-  - pkgconfig
-  - runc
-  - containers-common
 
-podman_manual_mapping: true
+podman_manual_mapping: True

@@ -6,4 +6,4 @@ podman_packages:
   - podman
   - podman-cni-config
 
-podman_manual_mapping: false
+podman_manual_mapping: False
