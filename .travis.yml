@@ -11,7 +11,6 @@ env:
   matrix:
     - MOLECULE_DIST: 'jam82/arch-molecule:latest'
     - MOLECULE_DIST: 'jam82/centos-molecule:7'
-    - MOLECULE_DIST: 'jam82/centos-molecule:8'
     - MOLECULE_DIST: 'jam82/ubuntu-molecule:18.04'
 
 services: docker
