@@ -17,7 +17,7 @@ env:
 services: docker
 
 install:
-  - pip install testinfra molecule docker
+  - pip install molecule docker
 
 script:
   - molecule --version
