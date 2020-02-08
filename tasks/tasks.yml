@@ -21,6 +21,7 @@
 
 - name: Include tasks for /etc/containers configuration
   include_tasks: conf.yml
+  when: podman_configure | bool
 
 - name: Include tasks for sysctl configuration
   include_tasks: sysctl.yml

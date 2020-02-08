@@ -2,6 +2,12 @@
 
 Ansible role for setting up [podman](https://podman.io).
 
+As podman now creates a working default configuration, the variable
+`podman_configure` was introduced to skip custom configuration.
+In erlier versions podman used `journald` as events_logger
+and threw an error in rootless mode,
+which made explicit configuration of `file` necessary.
+
 ## Supported Platforms
 
 * Archlinux
@@ -19,6 +25,8 @@ Variables for this role:
 | variable | defaults/main/*.yml | type | description |
 | -------- | ------------------- | ---- | ----------- |
 | podman_enabled | False | boolean | determine whether role is enabled (true) or not (false) |
+| podman_configure | False | boolean | use default configuration when False, write config, when True |
+| podman_users | { root: '100000:65535' } | dictionary | podman users that get uid mapping configured |
 | podman_users | { root: '100000:65535' } | dictionary | podman users that get uid mapping configured |
 | podman_manual_mapping | True | boolean | ansible managed /etc/subuid and /etc/subgid entries |
 | podman_search_registries | - 'docker.io' | items | list of registries that podman is pulling images from |
@@ -43,12 +51,12 @@ For a basic setup with default values run:
 # play: example-site
 # file: site.yml
 
-- hosts: podman-servers
+- hosts: podman_hosts
   vars:
     podman_enabled: True
     podman_users:
       root: '100000:65535'
-      <user1>: '165536:65535'
+      myuser1: '165536:65535'
       ...
     podman_registries:
       - 'registry.access.redhat.com'
