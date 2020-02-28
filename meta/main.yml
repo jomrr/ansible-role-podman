@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Jonas Mauer (jam@kabelmail.net)
+  description: "Ansible role for setting up podman."
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - 18.04
+    - name: ArchLinux
+  galaxy_tags:
+    - containers
+    - podman
+dependencies: []
