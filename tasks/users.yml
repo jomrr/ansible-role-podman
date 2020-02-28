@@ -32,5 +32,7 @@
   template:
     src: home/libpod.conf.j2
     dest: "{{ getent_passwd[item.key][4] }}/.config/containers/libpod.conf"
+    owner: "{{ getent_passwd[item.key][1] }}"
+    group: "{{ getent_passwd[item.key][2] }}"
   loop: "{{ podman_users|dict2items }}"
   when: getent_passwd[item.key][1]|int >= 1000
