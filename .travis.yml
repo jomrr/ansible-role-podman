@@ -16,7 +16,7 @@ env:
 services: docker
 
 install:
-  - pip install molecule docker
+  - pip install ansible-lint docker flake8 molecule testinfra yamllint
 
 script:
   - molecule --version
