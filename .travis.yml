@@ -1,24 +1,21 @@
 ---
+# role: ansible-role-podman
 # file: .travis.yml
 
 language: python
 
-python:
-  - "3.6"
-  - "3.7"
+os: linux
+dist: focal
 
-env:
-  matrix:
-    - MOLECULE_DIST: 'jam82/arch-molecule:latest'
-    - MOLECULE_DIST: 'jam82/centos-molecule:7'
-    - MOLECULE_DIST: 'jam82/ubuntu-molecule:18.04'
+branches:
+  only:
+    - main
 
-services: docker
+before_install:
+  - python -m pip install --upgrade pip
 
 install:
-  - pip install ansible-lint docker flake8 molecule testinfra yamllint
+  - pip install ansible yamllint ansible-lint
 
 script:
-  - molecule --version
-  - ansible --version
-  - molecule test
+  - ansible-lint

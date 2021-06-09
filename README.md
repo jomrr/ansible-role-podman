@@ -1,4 +1,4 @@
-# ansible-role-podman [![Build Status](https://travis-ci.org/jam82/ansible-role-podman.svg?branch=master)](https://travis-ci.org/jam82/ansible-role-podman)
+# ansible-role-podman [![Build Status](https://travis-ci.org/jam82/ansible-role-podman.svg?branch=main)](https://travis-ci.org/jam82/ansible-role-podman)
 
 Ansible role for setting up [podman](https://podman.io).
 
