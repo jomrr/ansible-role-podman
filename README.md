@@ -27,7 +27,6 @@ Variables for this role:
 | podman_enabled | False | boolean | determine whether role is enabled (true) or not (false) |
 | podman_configure | False | boolean | use default configuration when False, write config, when True |
 | podman_users | { root: '100000:65535' } | dictionary | podman users that get uid mapping configured |
-| podman_users | { root: '100000:65535' } | dictionary | podman users that get uid mapping configured |
 | podman_manual_mapping | True | boolean | ansible managed /etc/subuid and /etc/subgid entries |
 | podman_search_registries | - 'docker.io' | items | list of registries that podman is pulling images from |
 | podman_insecure_registries | [] | items | non TLS registries for podman, i.e. localhost:5000 |
