@@ -1,0 +1,12 @@
+# role: jomrr.podman
+# file: molecule/resources/playbooks/verify.yml
+# code: language=ansible-jinja
+
+- name: "PLAYBOOK | Verify | podman"
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Assert true"
+      ansible.builtin.assert:
+        that: "true"
+        fail_msg: "This should never fail"

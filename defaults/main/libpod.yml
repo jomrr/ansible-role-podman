@@ -1,5 +1,5 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: defaults/main/libpod.yml
 #
 ###############################################################################

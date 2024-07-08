@@ -1,9 +1,9 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: vars/Suse.yml
 
 podman_packages:
   - podman
   - podman-cni-config
 
-podman_manual_mapping: False
+podman_manual_mapping: false

@@ -1,0 +1,123 @@
+---
+# role: jomrr.podman
+# file: molecule/all/molecule.yml
+
+scenario:
+  name: all
+dependency:
+  name: galaxy
+  requirements-file: meta/requirements.yml
+driver:
+  name: podman
+lint: set -e; ansible-lint
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks, timer, yaml
+    ssh_connection:
+      pipelining: true
+  log: true
+  playbooks:
+    converge: ../resources/playbooks/converge.yml
+    verify: ../resources/playbooks/verify.yml
+  inventory:
+    group_vars:
+      all:
+        podman_users:
+          root: '100000:65535'
+          vagrant: '165536:65535'
+verifier:
+  name: ansible
+platforms:
+  - name: almalinux-8-podman
+    image: "docker.io/jomrr/molecule-almalinux:8"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: almalinux-9-podman
+    image: "docker.io/jomrr/molecule-almalinux:9"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: alpine-3.18-podman
+    image: "docker.io/jomrr/molecule-alpine:3.18"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: alpine-3.19-podman
+    image: "docker.io/jomrr/molecule-alpine:3.19"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: archlinux-latest-podman
+    image: "docker.io/jomrr/molecule-archlinux:latest"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: debian-11-podman
+    image: "docker.io/jomrr/molecule-debian:11"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: debian-12-podman
+    image: "docker.io/jomrr/molecule-debian:12"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: debian-13-podman
+    image: "docker.io/jomrr/molecule-debian:13"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: fedora-39-podman
+    image: "docker.io/jomrr/molecule-fedora:39"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: fedora-40-podman
+    image: "docker.io/jomrr/molecule-fedora:40"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: fedora-rawhide-podman
+    image: "docker.io/jomrr/molecule-fedora:rawhide"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: opensuse-leap-15-podman
+    image: "docker.io/jomrr/molecule-opensuse-leap:15"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: ubuntu-20.04-podman
+    image: "docker.io/jomrr/molecule-ubuntu:20.04"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: ubuntu-22.04-podman
+    image: "docker.io/jomrr/molecule-ubuntu:22.04"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true
+  - name: ubuntu-24.04-podman
+    image: "docker.io/jomrr/molecule-ubuntu:24.04"
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true

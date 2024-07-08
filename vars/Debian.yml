@@ -1,5 +1,5 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: vars/Debian.yml
 
 podman_ppa: "ppa:projectatomic/ppa"
@@ -28,4 +28,4 @@ podman_packages:
   - runc
   - uidmap
 
-podman_manual_mapping: True
+podman_manual_mapping: true

@@ -1,38 +1,40 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: tasks/users.yml
 
-- name: Create /etc/subuid and /etc/subgid
-  template:
+- name: "Create /etc/subuid and /etc/subgid"
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/{{ item }}"
     owner: root
     group: root
-    mode: '0644'
-    backup: yes
+    mode: "0644"
+    backup: true
   loop:
     - etc/subuid
     - etc/subgid
   when: podman_manual_mapping|bool
 
 - name: Set getent_passwd fact
-  getent:
+  ansible.builtin.getent:
     database: passwd
 
-- name: Create directory
-  file:
+- name: "Create directory"
+  ansible.builtin.file:
     path: "{{ getent_passwd[item.key][4] }}/.config/containers"
     state: directory
     owner: "{{ getent_passwd[item.key][1] }}"
     group: "{{ getent_passwd[item.key][2] }}"
-  loop: "{{ podman_users|dict2items }}"
+    mode: "0750"
+  loop: "{{ podman_users | dict2items }}"
   when: getent_passwd[item.key][1]|int >= 1000
 
-- name: Deploy user configuration for non-root pods
-  template:
+- name: "Deploy user configuration for non-root pods"
+  ansible.builtin.template:
     src: home/libpod.conf.j2
     dest: "{{ getent_passwd[item.key][4] }}/.config/containers/libpod.conf"
     owner: "{{ getent_passwd[item.key][1] }}"
     group: "{{ getent_passwd[item.key][2] }}"
-  loop: "{{ podman_users|dict2items }}"
+    mode: "0640"
+  loop: "{{ podman_users | dict2items }}"
   when: getent_passwd[item.key][1]|int >= 1000

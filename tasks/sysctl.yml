@@ -1,13 +1,13 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: tasks/sysctl.yml
 
 - name: Set sysctl config (Archlinux)
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.unprivileged_userns_clone
     value: '1'
     sysctl_file: /etc/sysctl.d/99-kernel-unprivileged-userns.conf
-    reload: yes
+    reload: true
   when: ansible_os_family == 'Archlinux'
 
 # ERROR in travis environment:

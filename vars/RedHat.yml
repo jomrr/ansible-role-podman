@@ -1,8 +1,8 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: vars/RedHat.yml
 
 podman_packages:
   - podman
 
-podman_manual_mapping: True
+podman_manual_mapping: true

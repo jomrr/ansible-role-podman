@@ -1,5 +1,5 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: molecule/kvm/molecule.yml
 
 dependency:
@@ -34,7 +34,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        podman_enabled: true
         podman_users:
           root: '100000:65535'
           vagrant: '165536:65535'

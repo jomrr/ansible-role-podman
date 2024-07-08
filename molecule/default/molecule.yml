@@ -1,50 +1,39 @@
 ---
-# role: ansible-role-podman
-# file: molecule/kvm/molecule.yml
+# role: jomrr.podman
+# file: molecule/default/molecule.yml
 
+scenario:
+  name: default
 dependency:
   name: galaxy
+  requirements-file: meta/requirements.yml
 driver:
-  name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: molecule/shared/yamllint.yml
-platforms:
-  - name: podman-default
-    image: ${MOLECULE_DIST:-"jomrr/ubuntu-molecule:18.04"}
-    command: ~
-    pre_build_image: True
-    privileged: True
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  name: podman
+lint: set -e; ansible-lint
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks, timer, yaml
+    ssh_connection:
+      pipelining: true
   log: true
-  lint:
-    name: ansible-lint
   playbooks:
-    converge: ../shared/playbook.yml
+    converge: ../resources/playbooks/converge.yml
+    verify: ../resources/playbooks/verify.yml
   inventory:
     group_vars:
       all:
-        podman_enabled: True
-        podman_configure: True
         podman_users:
           root: '100000:65535'
-        podman_storage_driver: 'vfs'
-        podman_storage_mountopt: ''
-        podman_conf_cgroup_manager: 'cgroupfs'
-        podman_conf_events_logger: 'file'
-scenario:
-  name: default
+          vagrant: '165536:65535'
 verifier:
-  name: testinfra
-  env:
-    PYTHONWARNINGS: "ignore"
-  directory: ../tests
-  options:
-    v: true
-    sudo: false
-  lint:
-    name: flake8
+  name: ansible
+platforms:
+  - name: podman
+    image: docker.io/${uns:-jomrr}/molecule-${img:-fedora}:${tag:-latest}
+    pre_build_image: true
+    entrypoint: null
+    command: null
+    systemd: true

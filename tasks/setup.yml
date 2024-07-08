@@ -1,30 +1,30 @@
 ---
-# role: ansible-role-podman
+# role: jomrr.podman
 # file: tasks/setup.yml
 
-- name: Add podman ppa
-  apt_repository:
+- name: "Add podman ppa"
+  ansible.builtin.apt_repository:
     repo: "{{ podman_ppa }}"
     codename: "{{ ansible_distribution_release }}"
     state: present
   when: ansible_os_family == 'Debian'
 
-- name: Add shadow-utils yum repo
-  yum_repository:
+- name: "Add shadow-utils yum repo"
+  ansible.builtin.yum_repository:
     name: vbatts-shadow-utils-newxidmap
     description: Copr repo for shadow-utils-newxidmap owned by vbatts
     file: vbatts-shadow-utils-newxidmap-epel-7
     baseurl: https://copr-be.cloud.fedoraproject.org/results/vbatts/shadow-utils-newxidmap/epel-7-$basearch/
-    gpgcheck: yes
+    gpgcheck: 1
     gpgkey: https://copr-be.cloud.fedoraproject.org/results/vbatts/shadow-utils-newxidmap/pubkey.gpg
-    repo_gpgcheck: no
-    skip_if_unavailable: yes
-    enabled: yes
+    repo_gpgcheck: 0
+    skip_if_unavailable: 1
+    enabled: 1
   when: ansible_os_family == 'RedHat'
     and ansible_distribution_version is version('7.6', '<=')
 
-- name: Install RedHat < 7.7 prerequisites
-  yum:
+- name: "Install RedHat < 7.7 prerequisites"
+  ansible.builtin.dnf:
     name:
       - shadow-utils46-newxidmap
       - slirp4netns
@@ -32,7 +32,7 @@
   when: ansible_os_family == 'RedHat'
     and ansible_distribution_version is version('7.6', '<=')
 
-- name: Install podman packages
-  package:
+- name: "Install podman packages"
+  ansible.builtin.package:
     name: "{{ podman_packages }}"
     state: present
