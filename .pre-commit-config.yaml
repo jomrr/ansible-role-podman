@@ -1,5 +1,5 @@
 ---
-# name: podman
+# role: podman
 # file: .pre-commit-config.yaml
 
 repos:
@@ -7,7 +7,7 @@ repos:
     rev: v25.5.0
     hooks:
       - id: ansible-lint
-        always_run: true
+        always_run: false
         entry: ansible-lint --force-color .
         language: python
         pass_filenames: false
