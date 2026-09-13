@@ -14,7 +14,6 @@ on:
       - LICENSE
       - README.md
       - docs/**
-      - pyproject.toml
 
 permissions:
   contents: read
@@ -46,12 +45,25 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Sync Python environment
+        run: uv sync --only-group ansible --only-group podman
+
+      - name: Cache Ansible Collections
+        if: hashFiles('collections.yml') != ''
+        uses: actions/cache@v6
+        with:
+          path: ~/.ansible/collections
+          key: collections-${{ hashFiles('collections.yml') }}
+
       - name: Install required Ansible Collections
         run: |
           set -euo pipefail
           if [ -f collections.yml ]; then
-            uvx --from ansible-core ansible-galaxy install -fr collections.yml
+            uv run ansible-galaxy collection install -r collections.yml
           fi
+
+      - name: Run ansible-lint
+        run: uv run ansible-lint --force-color --offline --profile production .
 
       - name: Show Podman environment
         run: |
@@ -62,9 +74,4 @@ jobs:
       - name: Run Molecule smoke scenario
         run: |
           set -euo pipefail
-          uvx \
-            --from molecule \
-            --with ansible-core \
-            --with ansible-lint \
-            --with "molecule-plugins[podman]" \
-            molecule test -s "default"
+          uv run molecule test -s "default"

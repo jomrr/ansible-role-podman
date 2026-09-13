@@ -2,10 +2,29 @@
 name = "podman"
 version = "1.0-beta.1"
 description = "Install Podman and manage engine, storage, registry and rootless account configuration."
-authors = ["Jonas Mauer"]
+requires-python = ">=3.12"
+authors = [
+  { name = "Jonas Mauer" },
+]
 license = "MIT"
 keywords = ["ansible", "role", "podman"]
-repository = "https://github.com/jomrr/ansible-role-podman"
+
+[project.urls]
+Repository = "https://github.com/jomrr/ansible-role-podman"
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+ansible = [
+  "ansible-core==2.20.*",
+  "ansible-lint==26.*",
+]
+
+podman = [
+  "molecule==26.*",
+  "molecule-plugins[podman]==25.*",
+]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -20,12 +39,3 @@ tag_format = "v{version}"
 version_toml = [
     "pyproject.toml:project.version",
 ]
-
-[tool.tox]
-envlist = ["lint"]
-
-[tool.tox.env.lint]
-description = "Lint code"
-skip_install = true
-deps = ["ansible-lint"]
-commands = [["ansible-lint", "--offline"]]
