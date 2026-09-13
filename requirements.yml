@@ -1,8 +1,0 @@
----
-# role: jomrr.podman
-# file: meta/requirements.yml
-
-collections:
-  - {'name': 'community.general'}
-
-roles: []

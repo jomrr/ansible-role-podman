@@ -1,0 +1,6 @@
+# Managed by ansible.
+# file: {{ template_destpath }}
+[engine]
+cgroup_manager = {{ podman_user_cgroup_manager | to_json }}
+events_logger = {{ podman_conf_events_logger | to_json }}
+namespace = {{ podman_conf_namespace | to_json }}

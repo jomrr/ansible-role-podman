@@ -1,21 +1,25 @@
 [project]
 name = "podman"
-version = "0.0.0"
-description = "Ansible role for setting up podman."
+version = "1.0-beta.1"
+description = "Install Podman and manage engine, storage, registry and rootless account configuration."
 authors = ["Jonas Mauer"]
 license = "MIT"
-keywords = []
+keywords = ["ansible", "role", "podman"]
 repository = "https://github.com/jomrr/ansible-role-podman"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
 
 [tool.semantic_release]
+branch = "main"
 commit_message = "build(release): version {version}"
-major_on_zero = false
+major_on_zero = true
 upload_to_pypi = false
 upload_to_vcs_release = true
-version_toml = ["pyproject.toml:project.version"]
+tag_format = "v{version}"
+version_toml = [
+    "pyproject.toml:project.version",
+]
 
 [tool.tox]
 envlist = ["lint"]

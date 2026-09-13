@@ -1,0 +1,109 @@
+---
+# role: podman
+# file: defaults/main.yml
+
+# Manage system and selected rootless user configuration files.
+# Choices: true, false.
+podman_configure: false
+
+# Cgroup manager for the system engine configuration.
+# Choices: systemd, cgroupfs.
+podman_conf_cgroup_manager: systemd
+
+# Event logger for system and managed rootless engines.
+# Choices: file, journald, none.
+podman_conf_events_logger: file
+
+# Container namespace for system and managed rootless engines.
+podman_conf_namespace: ''
+
+# Cgroup manager for managed non-root accounts.
+# Choices: systemd, cgroupfs.
+podman_user_cgroup_manager: cgroupfs
+
+# Storage driver; its backing filesystem must already support the driver.
+# Choices: overlay, vfs, btrfs, zfs, aufs.
+podman_storage_driver: overlay
+
+# Default overlay mount options; storage_options can override them.
+podman_storage_mountopt: nodev
+
+# Directory for persistent rootful container storage.
+podman_storage_graphroot: /var/lib/containers/storage
+
+# Directory for temporary rootful container storage.
+podman_storage_runroot: /run/containers/storage
+
+# Rootless storage path with native environment variable expansion.
+podman_storage_rootless_path: $HOME/.local/share/containers/storage
+
+# Native storage.options values and driver-specific subtables.
+podman_storage_options: {}
+# Overlay with an explicit userspace mount helper:
+# podman_configure: true
+# podman_storage_driver: overlay
+# podman_storage_options:
+#   overlay:
+#     mount_program: /usr/bin/fuse-overlayfs
+#     mountopt: nodev
+#
+# VFS without a copy-on-write backing filesystem:
+# podman_configure: true
+# podman_storage_driver: vfs
+# podman_storage_options:
+#   vfs:
+#     ignore_chown_errors: "false"
+#
+# Btrfs on an existing Btrfs filesystem with a per-container size limit:
+# podman_configure: true
+# podman_storage_driver: btrfs
+# podman_storage_graphroot: /srv/btrfs/containers
+# podman_storage_options:
+#   btrfs:
+#     size: 20G
+#
+# ZFS on an existing dataset (rootful storage only):
+# podman_configure: true
+# podman_storage_driver: zfs
+# podman_storage_graphroot: /srv/zfs/containers
+# podman_storage_options:
+#   zfs:
+#     fsname: tank/containers
+#     mountopt: nodev
+#     size: 20G
+
+# Ordered registries used to resolve unqualified image names.
+podman_search_registries:
+  - docker.io
+
+# Legacy registry locations allowing HTTP or unverified TLS.
+podman_insecure_registries: []
+
+# Legacy registry locations blocked for image pulls.
+podman_blocked_registries: []
+
+# Native registry definitions; matching locations override legacy lists.
+podman_registries: []
+# podman_registries:
+#   - prefix: images.example.org/team
+#     location: registry.example.org/team
+#     mirror:
+#       - location: mirror.example.org/team
+
+# Short image names mapped to fully qualified names without tags or digests.
+podman_registry_aliases: {}
+# podman_registry_aliases:
+#   app: images.example.org/team/app
+
+# Policy for resolving image names without an explicit registry or alias.
+# Choices: enforcing, permissive, disabled.
+podman_short_name_mode: enforcing
+
+# Existing account names mapped to subordinate ID ranges in start:count form.
+podman_users: {}
+# podman_users:
+#   containers: "200000:65536"
+
+# Manage the explicitly listed subordinate UID and GID assignments.
+# Choices: true, false.
+podman_manual_mapping: true

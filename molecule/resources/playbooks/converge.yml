@@ -1,10 +1,14 @@
-# role: jomrr.podman
+---
+# role: podman
 # file: molecule/resources/playbooks/converge.yml
-# code: language=ansible-jinja
 
-- name: "PLAYBOOK | Converge | podman"
+- name: PODMAN | Converge
   hosts: all
-  become: true
   gather_facts: true
+  pre_tasks:
+    - name: PODMAN | Resolve service account home for the storage test
+      ansible.builtin.getent:
+        database: passwd
+        key: podman_service
   roles:
     - role: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"

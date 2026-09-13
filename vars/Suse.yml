@@ -1,9 +1,12 @@
 ---
-# role: jomrr.podman
+# role: podman
 # file: vars/Suse.yml
 
-podman_packages:
+__podman_packages:
   - podman
-  - podman-cni-config
+  - shadow
+  - fuse-overlayfs
 
-podman_manual_mapping: false
+__podman_validators:
+  containers.conf: /usr/bin/env CONTAINERS_CONF=%s /usr/bin/podman --help
+  storage.conf: /usr/bin/env CONTAINERS_STORAGE_CONF=%s /usr/bin/podman --help

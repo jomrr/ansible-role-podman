@@ -1,0 +1,180 @@
+---
+# role: podman
+# file: meta/argument_specs.yml
+
+argument_specs:
+  main:
+    short_description: Install Podman and manage engine, storage, registry and rootless
+      account configuration.
+    options:
+      podman_configure:
+        type: bool
+        default: false
+        description:
+          - Manage system and selected rootless user configuration files.
+      podman_conf_cgroup_manager:
+        type: str
+        default: systemd
+        description:
+          - Cgroup manager for the system engine configuration.
+        choices:
+          - systemd
+          - cgroupfs
+      podman_conf_events_logger:
+        type: str
+        default: file
+        description:
+          - Event logger for system and managed rootless engines.
+        choices:
+          - file
+          - journald
+          - none
+      podman_conf_namespace:
+        type: str
+        default: ''
+        description:
+          - Container namespace for system and managed rootless engines.
+      podman_user_cgroup_manager:
+        type: str
+        default: cgroupfs
+        description:
+          - Cgroup manager for managed non-root accounts.
+        choices:
+          - systemd
+          - cgroupfs
+      podman_storage_driver:
+        type: str
+        default: overlay
+        description:
+          - Storage driver; its backing filesystem must already support the driver.
+        choices:
+          - overlay
+          - vfs
+          - btrfs
+          - zfs
+          - aufs
+      podman_storage_mountopt:
+        type: str
+        default: nodev
+        description:
+          - Default overlay mount options; storage_options can override them.
+      podman_storage_graphroot:
+        type: str
+        default: /var/lib/containers/storage
+        description:
+          - Directory for persistent rootful container storage.
+      podman_storage_runroot:
+        type: str
+        default: /run/containers/storage
+        description:
+          - Directory for temporary rootful container storage.
+      podman_storage_rootless_path:
+        type: str
+        default: $HOME/.local/share/containers/storage
+        description:
+          - Rootless storage path with native environment variable expansion.
+      podman_storage_options:
+        type: dict
+        default: {}
+        description:
+          - Native storage.options values and driver-specific subtables.
+      podman_search_registries:
+        type: list
+        default:
+          - docker.io
+        description:
+          - Ordered registries used to resolve unqualified image names.
+        elements: str
+      podman_insecure_registries:
+        type: list
+        default: []
+        description:
+          - Legacy registry locations allowing HTTP or unverified TLS.
+        elements: str
+      podman_blocked_registries:
+        type: list
+        default: []
+        description:
+          - Legacy registry locations blocked for image pulls.
+        elements: str
+      podman_registries:
+        type: list
+        default: []
+        description:
+          - Native registry definitions; matching locations override legacy lists.
+        elements: dict
+        options:
+          location:
+            type: str
+            required: true
+            description:
+              - Physical registry location, optionally including a namespace.
+          prefix:
+            type: str
+            description:
+              - Logical image prefix; Podman defaults it to location.
+          insecure:
+            type: bool
+            default: false
+            description:
+              - Allow HTTP or unverified TLS for this location.
+          blocked:
+            type: bool
+            default: false
+            description:
+              - Block pulls matching this prefix.
+          mirror-by-digest-only:
+            type: bool
+            default: false
+            description:
+              - Use mirrors only for digest references.
+          mirror:
+            type: list
+            elements: dict
+            default: []
+            description:
+              - Ordered registry mirrors.
+            options:
+              location:
+                type: str
+                required: true
+                description:
+                  - Physical mirror location.
+              insecure:
+                type: bool
+                default: false
+                description:
+                  - Allow HTTP or unverified TLS for the mirror.
+              pull-from-mirror:
+                type: str
+                default: all
+                choices:
+                  - all
+                  - digest-only
+                  - tag-only
+                description:
+                  - References accepted by this mirror.
+      podman_registry_aliases:
+        type: dict
+        default: {}
+        description:
+          - Short image names mapped to fully qualified names without tags or digests.
+      podman_short_name_mode:
+        type: str
+        default: enforcing
+        description:
+          - Policy for resolving image names without an explicit registry or alias.
+        choices:
+          - enforcing
+          - permissive
+          - disabled
+      podman_users:
+        type: dict
+        default: {}
+        description:
+          - Existing account names mapped to subordinate ID ranges in start:count form.
+      podman_manual_mapping:
+        type: bool
+        default: true
+        description:
+          - Manage the explicitly listed subordinate UID and GID assignments.

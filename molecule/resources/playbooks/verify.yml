@@ -1,12 +1,95 @@
-# role: jomrr.podman
+---
+# role: podman
 # file: molecule/resources/playbooks/verify.yml
-# code: language=ansible-jinja
 
-- name: "PLAYBOOK | Verify | podman"
+- name: PODMAN | Verify
   hosts: all
   gather_facts: false
   tasks:
-    - name: "Assert true"
+    - name: PODMAN | Read rootful engine state
+      become: true
+      become_user: root
+      ansible.builtin.command:
+        argv:
+          - podman
+          - info
+          - --format=json
+      changed_when: false
+      register: __podman_root_info
+
+    - name: PODMAN | Verify effective engine and storage settings
       ansible.builtin.assert:
-        that: "true"
-        fail_msg: "This should never fail"
+        that:
+          - (__podman_root_info.stdout | from_json).store.graphDriverName == 'vfs'
+          - (__podman_root_info.stdout | from_json).store.graphRoot == '/var/lib/podman-molecule'
+          - (__podman_root_info.stdout | from_json).host.cgroupManager == 'cgroupfs'
+          - (__podman_root_info.stdout | from_json).host.eventLogger == 'file'
+          - (__podman_root_info.stdout | from_json).registries.get('search', []) == []
+          - (__podman_root_info.stdout | from_json).registries['blocked.example.invalid'].Blocked
+          - not (__podman_root_info.stdout | from_json).registries['images.example.invalid/library'].Insecure
+        quiet: true
+
+    - name: PODMAN | Run an image through its configured alias and registry redirection
+      become: true
+      become_user: root
+      containers.podman.podman_container:
+        name: podman-smoke
+        image: podman-smoke:latest
+        command: echo podman-role-ok
+        detach: false
+        rm: true
+        network: none
+        state: started
+      register: __podman_smoke
+
+    - name: PODMAN | Verify container execution
+      ansible.builtin.assert:
+        that:
+          - __podman_smoke.stdout | trim == 'podman-role-ok'
+        quiet: true
+
+    - name: PODMAN | Read rootless engine state
+      become: true
+      become_user: podman_service
+      ansible.builtin.command:
+        argv:
+          - podman
+          - info
+          - --format=json
+      changed_when: false
+      environment:
+        XDG_RUNTIME_DIR: /run/podman-molecule-rootless
+      register: __podman_user_info
+
+    - name: PODMAN | Verify rootless service account configuration
+      ansible.builtin.assert:
+        that:
+          - (__podman_user_info.stdout | from_json).host.security.rootless
+          - (__podman_user_info.stdout | from_json).host.eventLogger == 'file'
+          - (__podman_user_info.stdout | from_json).host.cgroupManager == 'cgroupfs'
+          - (__podman_user_info.stdout | from_json).host.idMappings.uidmap[1].host_id == 11000
+          - (__podman_user_info.stdout | from_json).host.idMappings.gidmap[1].host_id == 11000
+          - (__podman_user_info.stdout | from_json).store.graphDriverName == 'vfs'
+          - (__podman_user_info.stdout | from_json).store.graphRoot == '/var/lib/podman_service/podman-molecule-storage'
+        quiet: true
+
+    - name: PODMAN | Read shared subordinate assignment files
+      ansible.builtin.slurp:
+        src: "{{ __podman_mapping_file }}"
+      loop:
+        - /etc/subuid
+        - /etc/subgid
+      loop_control:
+        loop_var: __podman_mapping_file
+        label: "{{ __podman_mapping_file }}"
+      register: __podman_mapping_files
+
+    - name: PODMAN | Verify unrelated assignments survived both converges
+      ansible.builtin.assert:
+        that:
+          - "'podman_unmanaged:30000:4096' in (__podman_mapping.content | b64decode).splitlines()"
+        quiet: true
+      loop: "{{ __podman_mapping_files.results }}"
+      loop_control:
+        loop_var: __podman_mapping
+        label: "{{ __podman_mapping.source }}"

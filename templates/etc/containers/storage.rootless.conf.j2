@@ -1,0 +1,6 @@
+# Managed by ansible.
+# file: {{ template_destpath }}
+[storage]
+graphroot = {{ podman_storage_rootless_path | to_json(ensure_ascii=false) }}
+runroot = ""
+rootless_storage_path = ""

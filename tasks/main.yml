@@ -1,30 +1,24 @@
 ---
-# role: jomrr.podman
+# role: podman
 # file: tasks/main.yml
 
-- name: Set os_family dependent variables
-  ansible.builtin.include_vars: '{{ ansible_os_family }}.yml'
+- name: PODMAN | Load platform packages
+  ansible.builtin.include_vars: "{{ ansible_facts.os_family }}.yml"
 
-- name: Set distribution dependent variables
-  ansible.builtin.include_vars: '{{ vars_file }}'
-  with_first_found:
-    - files:
-        - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
-        - '{{ ansible_distribution }}.yml'
-        - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'
-      skip: true
-  loop_control:
-    loop_var: vars_file
+- name: PODMAN | Install packages
+  become: true
+  become_user: root
+  ansible.builtin.package:
+    name: "{{ __podman_packages }}"
+    state: present
 
-- name: Include tasks for installing podman
-  ansible.builtin.include_tasks: setup.yml
+- name: PODMAN | Configure system containers
+  ansible.builtin.import_tasks: conf.yml
+  when: podman_configure
 
-- name: Include tasks for /etc/containers configuration
-  ansible.builtin.include_tasks: conf.yml
-  when: podman_configure | bool
-
-- name: Include tasks for sysctl configuration
-  ansible.builtin.include_tasks: sysctl.yml
-
-- name: Include tasks for subuid/subgid mappings and user config
+- name: PODMAN | Configure selected accounts
   ansible.builtin.include_tasks: users.yml
+  loop: "{{ podman_users | dict2items }}"
+  loop_control:
+    loop_var: __podman_user
+    label: "{{ __podman_user.key }}"

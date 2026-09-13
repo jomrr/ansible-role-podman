@@ -1,0 +1,52 @@
+---
+# role: podman
+# file: molecule/resources/playbooks/side_effect.yml
+
+- name: PODMAN | Exercise changes on existing configuration
+  hosts: all
+  gather_facts: true
+  pre_tasks:
+    - name: PODMAN | Resolve service account home for the storage test
+      ansible.builtin.getent:
+        database: passwd
+        key: podman_service
+  tasks:
+    - name: PODMAN | Change engine configuration with mapping management disabled
+      ansible.builtin.include_role:
+        name: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+      vars:
+        podman_conf_events_logger: none
+        podman_manual_mapping: false
+        podman_users:
+          podman_service: '15000:4096'
+
+    - name: PODMAN | Attempt configuration change with configuration management disabled
+      ansible.builtin.include_role:
+        name: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}"
+      vars:
+        podman_configure: false
+        podman_conf_events_logger: file
+        podman_manual_mapping: false
+        podman_users:
+          podman_service: '15000:4096'
+
+    - name: PODMAN | Read changed rootless engine state
+      become: true
+      become_user: podman_service
+      ansible.builtin.command:
+        argv:
+          - podman
+          - info
+          - --format=json
+      changed_when: false
+      environment:
+        XDG_RUNTIME_DIR: /run/podman-molecule-rootless
+      register: __podman_changed_info
+
+    - name: PODMAN | Verify engine change and disabled management policies
+      ansible.builtin.assert:
+        that:
+          - (__podman_changed_info.stdout | from_json).host.eventLogger == 'none'
+          - (__podman_changed_info.stdout | from_json).host.idMappings.uidmap[1].host_id == 11000
+          - (__podman_changed_info.stdout | from_json).host.idMappings.gidmap[1].host_id == 11000
+        quiet: true

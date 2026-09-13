@@ -1,7 +1,0 @@
----
-# role: jomrr.podman
-# file: defaults/main/main.yml
-#
-# use default config by default
-# set to true to enable the configuration task
-podman_configure: false

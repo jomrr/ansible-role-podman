@@ -1,38 +1,58 @@
-# role: jomrr.podman
+---
+# role: podman
 # file: molecule/resources/playbooks/prepare.yml
-# code: language=ansible-jinja
 
-- name: "PLAYBOOK | Prepare | podman"
+- name: PODMAN | Prepare
   hosts: all
-  become: true
   gather_facts: true
   tasks:
-    - name: "Update apk cache and installed packages"
-      community.general.apk:
-        available: true
-        update_cache: true
-        upgrade: true
-      when: ansible_pkg_mgr == "apk"
-    - name: "Update apt cache and installed packages"  # noqa: package-latest
-      ansible.builtin.apt:
-        force_apt_get: true
-        state: latest
-        update_cache: true
-      when: ansible_pkg_mgr == "apt"
-    - name: "Update dnf cache and installed packages"  # noqa: package-latest
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-        update_cache: true
-      when: ansible_pkg_mgr == "dnf"
-    - name: "Update pacman cache and installed packages"
-      community.general.pacman:
-        update_cache: true
-        upgrade: true
-      when: ansible_pkg_mgr == "pacman"
-    - name: "Update zypper cache and installed packages"  # noqa: package-latest
-      community.general.zypper:
-        name: "*"
-        state: latest
-        update_cache: true
-      when: ansible_pkg_mgr == "zypper"
+    - name: PODMAN | Restore mapping helper capabilities stripped from the Fedora image
+      become: true
+      become_user: root
+      community.general.capabilities:
+        path: "/usr/bin/{{ __podman_helper.name }}"
+        capability: "{{ __podman_helper.capability }}"
+        state: present
+      loop:
+        - name: newuidmap
+          capability: cap_setuid+ep
+        - name: newgidmap
+          capability: cap_setgid+ep
+      loop_control:
+        loop_var: __podman_helper
+        label: "{{ __podman_helper.name }}"
+      when: ansible_facts.distribution == 'Fedora'
+
+    - name: PODMAN | Create service account below UID 1000
+      become: true
+      become_user: root
+      ansible.builtin.user:
+        name: podman_service
+        uid: 901
+        system: true
+        home: /var/lib/podman_service
+        create_home: true
+
+    - name: PODMAN | Prepare rootless runtime directory
+      become: true
+      become_user: root
+      ansible.builtin.file:
+        path: /run/podman-molecule-rootless
+        state: directory
+        owner: podman_service
+        mode: '0700'
+
+    - name: PODMAN | Seed existing subordinate assignments
+      become: true
+      become_user: root
+      ansible.builtin.lineinfile:
+        path: "{{ __podman_fixture.0 }}"
+        line: "{{ __podman_fixture.1 }}"
+        create: true
+        owner: root
+        group: root
+        mode: '0644'
+      loop: "{{ ['/etc/subuid', '/etc/subgid'] | product(['podman_unmanaged:30000:4096', 'podman_service:10000:4096']) }}"
+      loop_control:
+        loop_var: __podman_fixture
+        label: "{{ __podman_fixture.0 }}: {{ __podman_fixture.1 }}"

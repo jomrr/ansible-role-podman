@@ -2,8 +2,12 @@
 # file: .gitignore
 
 __pycache__/
-!.gitkeep
 .ansible/
+.cache/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
 .idea/
 .tox/
 .venv/

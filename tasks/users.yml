@@ -1,40 +1,64 @@
 ---
-# role: jomrr.podman
+# role: podman
 # file: tasks/users.yml
 
-- name: "Create /etc/subuid and /etc/subgid"
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
-    backup: true
-  loop:
-    - etc/subuid
-    - etc/subgid
-  when: podman_manual_mapping|bool
-
-- name: Set getent_passwd fact
+- name: PODMAN | Resolve account home and ownership
   ansible.builtin.getent:
     database: passwd
+    key: "{{ __podman_user.key }}"
 
-- name: "Create directory"
+- name: PODMAN | Validate subordinate ID assignment
+  ansible.builtin.assert:
+    that:
+      - __podman_user.value is match('^[1-9][0-9]*:[1-9][0-9]*$')
+    quiet: true
+    fail_msg: "Invalid subordinate ID assignment for {{ __podman_user.key }}; expected positive start:count."
+  when: podman_manual_mapping
+
+- name: PODMAN | Maintain selected subordinate ID assignments
+  become: true
+  become_user: root
+  ansible.builtin.lineinfile:
+    path: "{{ __podman_mapping_file }}"
+    regexp: "^{{ __podman_user.key | regex_escape }}:"
+    line: "{{ __podman_user.key }}:{{ __podman_user.value }}"
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  loop:
+    - /etc/subuid
+    - /etc/subgid
+  loop_control:
+    loop_var: __podman_mapping_file
+    label: "{{ __podman_user.key }} ({{ __podman_mapping_file }})"
+  when: podman_manual_mapping
+
+- name: PODMAN | Create rootless configuration directory
+  become: true
+  become_user: root
   ansible.builtin.file:
-    path: "{{ getent_passwd[item.key][4] }}/.config/containers"
+    path: "{{ ansible_facts.getent_passwd[__podman_user.key][4] }}/.config/containers"
     state: directory
-    owner: "{{ getent_passwd[item.key][1] }}"
-    group: "{{ getent_passwd[item.key][2] }}"
-    mode: "0750"
-  loop: "{{ podman_users | dict2items }}"
-  when: getent_passwd[item.key][1]|int >= 1000
+    owner: "{{ ansible_facts.getent_passwd[__podman_user.key][1] }}"
+    group: "{{ ansible_facts.getent_passwd[__podman_user.key][2] }}"
+    mode: '0750'
+  when:
+    - podman_configure
+    - ansible_facts.getent_passwd[__podman_user.key][1] | int != 0
 
-- name: "Deploy user configuration for non-root pods"
+- name: PODMAN | Write rootless engine configuration
+  become: true
+  become_user: root
   ansible.builtin.template:
-    src: home/libpod.conf.j2
-    dest: "{{ getent_passwd[item.key][4] }}/.config/containers/libpod.conf"
-    owner: "{{ getent_passwd[item.key][1] }}"
-    group: "{{ getent_passwd[item.key][2] }}"
-    mode: "0640"
-  loop: "{{ podman_users | dict2items }}"
-  when: getent_passwd[item.key][1]|int >= 1000
+    src: home/containers.conf.j2
+    dest: "{{ ansible_facts.getent_passwd[__podman_user.key][4] }}/.config/containers/containers.conf"
+    owner: "{{ ansible_facts.getent_passwd[__podman_user.key][1] }}"
+    group: "{{ ansible_facts.getent_passwd[__podman_user.key][2] }}"
+    mode: '0640'
+    backup: true
+    validate: "{{ __podman_validators['containers.conf'] }}"
+  when:
+    - podman_configure
+    - ansible_facts.getent_passwd[__podman_user.key][1] | int != 0
