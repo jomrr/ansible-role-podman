@@ -3,8 +3,8 @@
 ![GitHub](https://img.shields.io/github/license/jomrr/ansible-role-podman)
 ![GitHub last commit](https://img.shields.io/github/last-commit/jomrr/ansible-role-podman)
 ![GitHub issues](https://img.shields.io/github/issues-raw/jomrr/ansible-role-podman)
-[![dev](https://img.shields.io/github/actions/workflow/status/jomrr/ansible-role-podman/dev.yml?branch=dev&event=push&label=dev)](https://github.com/jomrr/ansible-role-podman/actions/workflows/dev.yml?query=branch%3Adev)
-[![main](https://img.shields.io/github/actions/workflow/status/jomrr/ansible-role-podman/main.yml?branch=main&event=push&label=main)](https://github.com/jomrr/ansible-role-podman/actions/workflows/main.yml?query=branch%3Amain)
+[![dev](https://img.shields.io/github/actions/workflow/status/jomrr/ansible-role-podman/dev.yml?branch=dev&label=dev)](https://github.com/jomrr/ansible-role-podman/actions/workflows/dev.yml?query=branch%3Adev)
+[![main](https://img.shields.io/github/actions/workflow/status/jomrr/ansible-role-podman/main.yml?branch=main&label=main)](https://github.com/jomrr/ansible-role-podman/actions/workflows/main.yml?query=branch%3Amain)
 
 Install Podman and manage engine, storage, registry and rootless account
 configuration.
